@@ -1363,13 +1363,16 @@ public class SearchManager implements ISearchManager {
             String name = field.getAttributeValue(LuceneFieldAttribute.NAME.toString());
             String string = field.getAttributeValue(LuceneFieldAttribute.STRING.toString()); // Lower case field is handled by Lucene Analyzer.
             if (name.equals(Geonet.LUCENE_LOCALE_KEY)) hasLocaleField = true;
-            if (string.trim().length() > 0) {
+            String sToken = field.getAttributeValue(LuceneFieldAttribute.ANALYZE.toString());
+            boolean token = (sToken != null && sToken.equals("true")) || luceneConfig.isTokenizedField(name);
+
+            if (string.trim().length() > 0 || token) {
                 String sStore = field.getAttributeValue(LuceneFieldAttribute.STORE.toString());
                 String sIndex = field.getAttributeValue(LuceneFieldAttribute.INDEX.toString());
 
+
                 boolean bStore = sStore != null && sStore.equals("true");
                 boolean bIndex = sIndex != null && sIndex.equals("true");
-                boolean token = luceneConfig.isTokenizedField(name);
                 boolean isNumeric = luceneConfig.isNumericField(name);
 
                 FieldType fieldType = new FieldType();
@@ -1396,7 +1399,11 @@ public class SearchManager implements ISearchManager {
                         continue;
                     }
                 } else {
-                    f = new Field(name, string, fieldType);
+                    if (string.trim().length() == 0 && token) {
+                        f = new Field(String.format("%sIsBlank",name), "blank", fieldType);
+                    } else {
+                        f = new Field(name, string, fieldType);
+                    }
                 }
 
                 fFacets.addAll(getFacetFieldsFor(language, name, string));
@@ -1550,6 +1557,12 @@ public class SearchManager implements ISearchManager {
             @Override
             public String toString() {
                 return "index";
+            }
+        },
+        ANALYZE {
+            @Override
+            public String toString() {
+                return "analyze";
             }
         }
     }

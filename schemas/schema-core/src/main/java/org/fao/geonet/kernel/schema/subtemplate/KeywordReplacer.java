@@ -21,27 +21,28 @@
  * Rome - Italy. email: geonetwork@osgeo.org
  */
 
-package org.fao.geonet.kernel.schema;
+package org.fao.geonet.kernel.schema.subtemplate;
 
+import org.apache.lucene.index.IndexReader;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 
-import java.util.List;
+import static org.fao.geonet.kernel.schema.subtemplate.SubtemplatesByLocalXLinksReplacer.KEYWORD;
 
-/**
- * Created by francois on 8/20/14.
- */
-public interface MultilingualSchemaPlugin {
-    /**
-     * Return the sub element matching the requested language.
-     *
-     * @param element            The element to search in
-     * @param languageIdentifier The translation language to search for
-     */
-    public List<Element> getTranslationForElement(Element element, String languageIdentifier);
+public class KeywordReplacer implements Replacer {
 
-    public void addTranslationToElement(Element element, String languageIdentifier, String value);
+    private ManagersProxy managersProxy;
 
-    public Element removeTranslationFromElement(Element element, List<String> mdLang) throws JDOMException;
+    public KeywordReplacer(ManagersProxy managersProxy) {
+        this.managersProxy = managersProxy;
+    }
 
+    @Override
+    public Status replaceAll(Element dataXml, String localXlinkUrlPrefix, IndexReader indexReader, String localisedCharacterStringLanguageCode, String lang) {
+        return managersProxy.replaceAllKeyword(dataXml);
+    }
+
+    @Override
+    public String getAlias() {
+        return KEYWORD;
+    }
 }
