@@ -4,7 +4,7 @@
     <gmd:descriptiveKeywords>
         <gmd:MD_Keywords>
             <gmd:keyword>
-                <gco:CharacterString>biologie</gco:CharacterString>
+                <gco:CharacterString>Bevölkerungsentwicklung</gco:CharacterString>
             </gmd:keyword>
             <gmd:keyword>
                 <gco:CharacterString>Soziale Bedingung</gco:CharacterString>
@@ -15,7 +15,7 @@
                         <gmd:LocalisedCharacterString locale="#EN">only it translation does have a meaning</gmd:LocalisedCharacterString>
                     </gmd:textGroup>
                     <gmd:textGroup>
-                        <gmd:LocalisedCharacterString locale="#IT">aspetti militari</gmd:LocalisedCharacterString>
+                        <gmd:LocalisedCharacterString locale="#IT">allevamento di pollame</gmd:LocalisedCharacterString>
                     </gmd:textGroup>
                 </gmd:PT_FreeText>
             </gmd:keyword>

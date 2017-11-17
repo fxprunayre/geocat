@@ -78,14 +78,14 @@ public class ISO19139KeywordReplacerTest extends AbstractCoreIntegrationTest {
         assertFalse(status.isError());
         Set<String> themes = getXLinkedKeyword(md);
         assertEquals(5, themes.size());
-        assertTrue(themes.contains("external.theme.gemet-theme|881"));
-        assertTrue(themes.contains("external.theme.gemet-theme|7784"));
-        assertTrue(themes.contains("external.theme.gemet-theme|5241"));
+        assertTrue(themes.contains("external.theme.gemet|6528"));
+        assertTrue(themes.contains("external.theme.gemet|7784"));
+        assertTrue(themes.contains("external.theme.gemet|6549"));
         assertTrue(themes.contains("external.place.regions|CAF"));
         assertTrue(themes.contains("external.place.regions|ECU"));
 
-        assertEquals("local://srv/api/registries/vocabularies/keyword?thesaurus=external.theme.gemet-theme&"+
-                        "id=http://www.eionet.europa.eu/gemet/concept/5241&multiple=false&"+
+        assertEquals("local://srv/api/registries/vocabularies/keyword?thesaurus=external.theme.gemet&"+
+                        "id=http://www.eionet.europa.eu/gemet/concept/6549&multiple=false&"+
                         "lang=fre,eng,ger,ita,roh&textgroupOnly&skipdescriptivekeywords",
                     ((Element)Xml.selectNodes(md, ".//gmd:descriptiveKeywords").get(0))
                         .getAttribute("href").getValue());
@@ -97,18 +97,18 @@ public class ISO19139KeywordReplacerTest extends AbstractCoreIntegrationTest {
         List<?> fischerei = Xml.selectNodes(md, "*//gco:CharacterString[text()='external.theme.gemet-theme']" +
                 "//parent::*//parent::*//parent::*//parent::gmd:MD_Keywords" +
                 "//child::gmd:keyword//child::gco:CharacterString");
-        ((Element) fischerei.get(0)).setText("Fischerei");
-        ((Element) fischerei.get(1)).setText("pêche (général)");
+        ((Element) fischerei.get(0)).setText("Fischereiwirtschaft");
+        ((Element) fischerei.get(1)).setText("gestion de la pêche");
         Xml.selectElement(md,
-                "*//child::gmd:LocalisedCharacterString[text()='aspetti militari']")
-                .setText("pesca (attività)");
+                "*//child::gmd:LocalisedCharacterString[text()='allevamento di pollame']")
+                .setText("sfruttamento razionale della pesca industriale");
 
         Status status = toTest.replaceAll(md);
 
         assertFalse(status.isError());
         Set<String> themes = getXLinkedKeyword(md);
         assertEquals(3, themes.size());
-        assertTrue(themes.contains("external.theme.gemet-theme|3237"));
+        assertTrue(themes.contains("external.theme.gemet|3238"));
         assertTrue(themes.contains("external.place.regions|CAF"));
         assertTrue(themes.contains("external.place.regions|ECU"));
     }
@@ -118,14 +118,14 @@ public class ISO19139KeywordReplacerTest extends AbstractCoreIntegrationTest {
         Element md = getSubtemplateXml(KEYWORD_RESOURCE);
         Xml.selectElement(md,
                 "*//child::gmd:LocalisedCharacterString[text()='only it translation does have a meaning']")
-                .setText("military aspects");
+                .setText("poultry farming");
 
         Status status = toTest.replaceAll(md);
 
         assertFalse(status.isError());
         Set<String> themes = getXLinkedKeyword(md);
         assertEquals(5, themes.size());
-        assertTrue(themes.contains("external.theme.gemet-theme|5241"));
+        assertTrue(themes.contains("external.theme.gemet|6549"));
     }
 
     @Test
@@ -139,8 +139,8 @@ public class ISO19139KeywordReplacerTest extends AbstractCoreIntegrationTest {
 
         assertFalse(status.isError());
         Set<String> themes = getXLinkedKeyword(md);
-        assertEquals(5, themes.size());
-        assertTrue(themes.contains("external.theme.gemet-theme|5241"));
+        assertEquals(6, themes.size());
+        assertTrue(themes.contains("external.theme.gemet|6549"));
     }
 
     @Test
@@ -154,8 +154,8 @@ public class ISO19139KeywordReplacerTest extends AbstractCoreIntegrationTest {
 
         assertFalse(status.isError());
         Set<String> themes = getXLinkedKeyword(md);
-        assertEquals(5, themes.size());
-        assertTrue(themes.contains("external.theme.gemet-theme|5241"));
+        assertEquals(6, themes.size());
+        assertTrue(themes.contains("external.theme.gemet|6549"));
     }
 
     @Test
