@@ -193,7 +193,7 @@
                           else if (normalize-space(gmd:description/gco:CharacterString) != '')
                           then gmd:description/gco:CharacterString
                           else string-join(.//gco:Decimal, ', ')}"
-                 store="true" index="true"/>
+                 store="true" index="true" analyze="true"/>
         </xsl:otherwise>
       </xsl:choose>
 

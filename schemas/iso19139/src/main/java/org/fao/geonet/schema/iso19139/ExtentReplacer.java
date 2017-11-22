@@ -26,7 +26,6 @@ package org.fao.geonet.schema.iso19139;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.fao.geonet.kernel.schema.subtemplate.AbstractReplacer;
 import org.fao.geonet.kernel.schema.subtemplate.ConstantsProxy;
@@ -58,17 +57,16 @@ public class ExtentReplacer extends AbstractReplacer {
     }
 
     @Override
-    protected Query queryAddExtraClauses(BooleanQuery query, Element extent, String lang) throws Exception {
+    protected void queryAddExtraClauses(BooleanQuery query, Element extent, String lang) throws Exception {
         String title = getFieldValue(extent, ".//gmd:description", lang);
         if (title.length() != 0) {
-            addSubQuery(query, "_title", title);
+            addWeightingClause(query, "_title", title);
         } else {
             title = ((List<Element>) Xml.selectNodes(extent, ".//gco:Decimal", namespaces)).stream()
                     .map(elem -> elem.getText())
                     .collect(Collectors.joining(", "));
-            query.add(new TermQuery(new Term("_title", title)), BooleanClause.Occur.MUST);
+            addWeightingClause(query, "_title", title);
         }
-        return query;
     }
 
     @Override

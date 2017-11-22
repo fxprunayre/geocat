@@ -24,7 +24,6 @@
 package org.fao.geonet.schema.iso19139;
 
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.fao.geonet.kernel.schema.subtemplate.AbstractReplacer;
 import org.fao.geonet.kernel.schema.subtemplate.ConstantsProxy;
 import org.fao.geonet.kernel.schema.subtemplate.ManagersProxy;
@@ -54,14 +53,12 @@ public class FormatReplacer extends AbstractReplacer {
     }
 
     @Override
-    protected Query queryAddExtraClauses(BooleanQuery query, Element format, String lang) throws JDOMException {
+    protected void queryAddExtraClauses(BooleanQuery query, Element format, String lang) throws JDOMException {
         String name = getFieldValue(format, ".//gmd:name", lang);
         String version = getFieldValue(format, ".//gmd:version", lang);
 
-        addSubQuery(query, constantsProxy.getIndexFieldNamesANY(), name);
-        addSubQuery(query, constantsProxy.getIndexFieldNamesANY(), version);
-
-        return query;
+        addWeightingClause(query, constantsProxy.getIndexFieldNamesANY(), name);
+        addWeightingClause(query, constantsProxy.getIndexFieldNamesANY(), version);
     }
 
     @Override

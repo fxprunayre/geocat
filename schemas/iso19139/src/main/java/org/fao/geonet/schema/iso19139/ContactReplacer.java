@@ -24,7 +24,6 @@
 package org.fao.geonet.schema.iso19139;
 
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.fao.geonet.kernel.schema.subtemplate.AbstractReplacer;
 import org.fao.geonet.kernel.schema.subtemplate.ConstantsProxy;
 import org.fao.geonet.kernel.schema.subtemplate.ManagersProxy;
@@ -56,16 +55,14 @@ public class ContactReplacer extends AbstractReplacer {
     }
 
     @Override
-    protected Query queryAddExtraClauses(BooleanQuery query, Element contact, String lang) throws JDOMException {
+    protected void queryAddExtraClauses(BooleanQuery query, Element contact, String lang) throws JDOMException {
         String individualName = getFieldValue(contact, ".//gmd:individualName", lang);
         String organisationName = getFieldValue(contact, ".//gmd:organisationName", lang);
         String email = getFieldValue(contact, ".//gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress", lang);
 
-        addSubQuery(query,"individualName", individualName);
-        addSubQuery(query,"orgName", organisationName);
-        addSubQuery(query,"_email", email);
-
-        return query;
+        addWeightingClause(query,"individualName", individualName);
+        addWeightingClause(query,"orgName", organisationName);
+        addWeightingClause(query,"_email", email);
     }
 
     @Override

@@ -24,7 +24,6 @@
 package org.fao.geonet.schema.iso19139che;
 
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.fao.geonet.kernel.schema.subtemplate.ConstantsProxy;
 import org.fao.geonet.kernel.schema.subtemplate.ManagersProxy;
 import org.jdom.Element;
@@ -42,19 +41,16 @@ public class ContactReplacer extends org.fao.geonet.schema.iso19139.ContactRepla
     }
 
     @Override
-    protected Query queryAddExtraClauses(BooleanQuery query, Element contact, String lang) throws JDOMException {
+    protected void queryAddExtraClauses(BooleanQuery query, Element contact, String lang) throws JDOMException {
         String firstName = getFieldValue(contact, ".//che:individualFirstName", lang);
         String lastName = getFieldValue(contact, ".//che:individualLastName", lang);
         String organisationName = getFieldValue(contact, ".//gmd:organisationName", lang);
         String email = getFieldValue(contact, ".//gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress|" +
                 ".//gmd:contactInfo/gmd:CI_Contact/gmd:address/*[@gco:isoType=\"gmd:CI_Address\"]/gmd:electronicMailAddress", lang);
 
-        addSubQuery(query, "firstName", firstName);
-        addSubQuery(query, "lastName", lastName);
-        addSubQuery(query, "orgName", organisationName);
-        addSubQuery(query, "_email", email);
-
-        return query;
+        addWeightingClause(query, "firstName", firstName);
+        addWeightingClause(query, "lastName", lastName);
+        addWeightingClause(query, "orgName", organisationName);
+        addWeightingClause(query, "_email", email);
     }
-
 }
