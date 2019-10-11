@@ -5,8 +5,8 @@ References:
 
 The idea is to:
 * Check what are the sections used or not in existing record?
-* What is the status in subtemplates? If fields are not use, maybe we could simplify drastically editor form (eg. table list of format with only name and version - instead of current advanced editor form)
-* What are the main value used per field? eg. on other constraints https://jira.swisstopo.ch/browse/MGEO_SB-517.
+* What is the status in subtemplates? If fields are not use, maybe we could simplify drastically editor form (eg. table list of format with only name and version - instead of current advanced editor form providing all the model)
+* What are the main values used per field? eg. on other constraints https://jira.swisstopo.ch/browse/MGEO_SB-517.
 
 
 ## List of indicators
@@ -14,23 +14,22 @@ The idea is to:
 Based on analysis of validation rules and knowledge on existing records, it can be relevant to extract the following indicators:
 
 * Subtemplates
- * Formats 
-  * Only name & version ? (2 formats have also specification described)
- * Contacts
-  * Usage of organisationAcronym, individualFirstName
- * Extents
-  * Using vertical or temporal element ?
+  * Formats 
+    * Only name & version ? (2 formats have also specification described)
+  * Contacts
+    * Usage of organisationAcronym, individualFirstName
+  * Extents
+    * Using vertical or temporal element ?
 
 * Records
- * Extent / Using vertical element ? = 0
- * Extent / temporal element ? = 69 (non moissonné), 249 (au total)
-  
-  
-* Geobasisdatensatz
- * Collective title
- * che:basicGeodataID
- * che:legislationInformation: not empty, list of values to make it more consistent?
-
+  * Extent / Using vertical element ? = 0
+  * Extent / temporal element ? = 69 (non moissonné), 249 (au total)
+  * Geobasisdatensatz
+    * Collective title
+    * che:basicGeodataID
+    * che:legislationInformation: not empty, list of values to make it more consistent?
+ 
+  * To be continued... Would require a list of questions that swisstopo team would like to answer (Below a couple of checks made using SQL queries on formats, contacts, extent and a couple of other element)
 
 ## Strategy for analysis
 
@@ -38,15 +37,25 @@ Based on analysis of validation rules and knowledge on existing records, it can 
 a) SQL queries in db and manual analysis using tools like excel
 b) Index catalogue content in Elasticsearch and use Kibana to analyse the content
 
-Option b requires:
-* to index all fields needed to all indicator to be indexed properly
+Option a notes:
+* Can't be easily apply to all possible fields. List indicator first
+* Requires access to database 
+* Can't be filtered dynamically, eg. test on all records, then not harvested, then canton X or Y, on public record only  ... Will need a query for each combination
+* Export as CSV
+
+
+Option b notes:
+* Can't be easily apply to all possible fields. List indicator first to index all fields needed to all indicator to be indexed properly
+* Could be used online and be used depending on needs and questions
+* Can be synch from the catalogue regularly (as far as information is part of the index)
+* Dynamic dashboards that can be managed by swisstopo team
 
 
 
 
 ## Example of SQL queries
 
-Note: Test made on a local old geocat.ch database (not INT or PROD data). So numbers do not reflect actual situation.
+Note: **Test made on a old local geocat.ch database** (not INT or PROD data). So numbers do not reflect actual situation.
 
 ```sql
 WITH ns AS (
